@@ -1,0 +1,588 @@
+﻿<style>
+    #tblDD {
+        padding: 0px;
+        text-align: left;
+    }
+</style>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-12">
+
+
+            <h3> Bug List</h3>
+            <hr>
+
+            <div class="notifications pull-right padbot10">
+                <ul>
+                    <li>
+                        <input type="text" ng-model="search" placeholder="Search" style="border-radius:9px;">
+                    </li>
+                    <li ng-show="list"><a href='' ng-click="buglist();"><i class="fa fa-bug"></i> BugList</a></li>
+                    <li><a data-toggle="modal" id='btnBug' href='' ng-click="addBug();" data-target="#createBug"><i class="fa fa-bug"></i> Add Bug</a></li>
+                    <li><a data-toggle="modal" id='btnFilter' href='' ng-click="Filter()" data-target="#createFilter"><i class="fa fa-filter"></i> Filter</a></li>
+                    <li><a id='btnclear' href='' ng-click="ClearFilter()"><i class="fa fa-filter"></i> Clear Filter</a></li>
+                    <!--li><a href="#" data-toggle="modal" data-target="#createFilter"><i class="fa fa-filter"></i> Create Filter</a></!--li-->
+
+                    <li><a id="btnExport" href='#Export'><i class="fa fa-file-excel-o"></i> Export</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-head">
+                        <tr>
+                            <th width="32" ng-click="sort('bug_id')">ID <span class="glyphicon sort-icon" style="font-size:10px;" ng-show="sortKey=='bug_id'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span> </th>
+                            <th width="190" ng-click="sort('bug_title')">Bug Name <span class="glyphicon sort-icon" style="font-size:10px;" ng-show="sortKey=='bug_title'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
+                            <th width="113" ng-click="sort('mod_name')">Module <span class="glyphicon sort-icon" style="font-size:10px;" ng-show="sortKey=='mod_name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
+                            <th width="94">Created On</th>
+                            <th width="110">Assigned To</th>
+                            <th width="81">Status</th>
+                            <th width="81">Severity</th>
+
+                            <th width="77">Attachment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="bug in buglistmodel|orderBy:sortKey:reverse|filter:search" value="{{ bug.proj_id}}">
+                            <td style="color:orangered"><strong>{{ bug.bug_id}}</strong></td>
+                            <td class="{{bug.status_name}}"><a id='bugTitle' data-toggle="modal" data-target="#createBug" ng-click="editBug(bug)">{{bug.bug_title}}</a></td>
+
+                            <td>{{bug.mod_id.mod_name}}</td>
+                            <td>{{bug.bug_createddate | date :'dd-MM-yyyy'}}</td>
+                            <td>{{bug.assignedto.user_emailid ||bug.assignedto.user_username}}</td>
+                            <td>
+                                <select class="label label-small btn-block" id="tblDD" data-toggle="dropdown" ng-style="getStyle(bug.bug_stat_id)" ng-model="bug.bug_stat_id" ng-click="onstatuschanged(bug)">
+                                    <option ng-repeat="status in statusmodel" value="{{ status.status_id}}">{{status.status_name}}</option>
+                                </select>
+                            </td>
+                            <td>{{bug.seve_name}}</td>
+
+                            <td><a ng-if="bug.bug_attachment" data-toggle="modal" data-target="#attachments_{{bug.key}}" ng-href="{{bug.attachmentpath}}" class="fa fa-paperclip"><img ng-src="{{hash}}"></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-6 pull-right">
+                    <div class="form-inline pull-right">
+                        <button type="button" ng-show="show" class="btn bg-navy form-group" ng-disabled="!enablePrevPage" ng-click="prevPage()"><i class="fa fa-angle-double-left" aria-hidden="true"></i> </button>
+                        <button type="button" ng-show="show1" class="btn btn-default" ng-disabled="!enablePrevPage" ng-click="prevPage1()"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>
+
+                        <label class="form-group text-warning"> Page: <b style="color:black; font-size:18px"> {{ pageNo }} &nbsp; </b></label>
+                        <button type="button" ng-show="btn" class="btn bg-navy form-group" ng-disabled="!enableNextPage" ng-click="nextPage()"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
+                        <button type="button" ng-show="btn1" class="btn btn-default" ng-disabled="!enableNextPage" ng-click="nextPage1()"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<div class="modal fade" id="createBug" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">{{ isEdit ? 'Add Bug' : 'Update Bug' }}</h3>
+            </div>
+            <div class="modal-body-content">
+                <form role="form" name="form" novalidate>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+
+                                <label>Bug Title: <span class="red">*</span></label>
+                                <input type="text" class="form-control" id="bugtitle" name="bugtitle" ng-model="bugmodel.bug_title" maxlength="150" placeholder="Enter bug title" required>
+                                <span style="color:red;" ng-show="form.bugtitle.$touched && form.bugtitle.$invalid || submitted&&form.bugtitle.$error.required ">Bug title is required.</span>
+                                <span style="color:red" ng-show="form.bugtitle.$error.pattern">Please enter valid bug title.</span>
+                            </div>
+                            <div class="form-group">
+
+
+                                <label>Assigned To: <span class="red">*</span></label>
+                                <select class="form-control" ng-model="bugmodel.bug_assignedto" id="assigneename" name="assigneename" required>
+                                    <option selected disabled value=""> -- Select Assigned to -- </option>
+                                    <option ng-repeat="option in assignedUsers" value="{{ option.user_id}}">{{ option.user_emailid}}</option>
+                                </select>
+                                <span style="color:red;" ng-show="form.assigneename.$touched && form.assigneename.$invalid || submitted&&form.assigneename.$error.required">Assigned to is required.</span>
+
+                            </div>
+                            <div class="form-group">
+                                <label>Assigned By:</label>
+                                <input type="text" class="form-control" id="usr" ng-model="bugmodel.bug_assignedby" ng-disabled="true" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Due:</label>
+                                <input type="text" class="form-control" value="Enter Due">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Severity: <span class="red">*</span></label>
+                                <select class="form-control" ng-model="bugmodel.bug_sev_id" id="sevename" name="severity" required>
+                                    <option selected disabled value=""> -- Select Severity -- </option>
+                                    <option ng-repeat="severity in severitymodel" value="{{ severity.seve_id}}">{{ severity.seve_name}}</option>
+                                </select>
+                                <span style="color:red;" ng-show="form.severity.$touched && form.severity.$invalid||submitted&&form.severity.$error.required">Severity is required.</span>
+
+                            </div>
+                            <div class="form-group">
+                                <label>Module: <span class="red">*</span></label>
+                                <select class="form-control" ng-model="bugmodel.bug_mod_id" id="modname" name="module" required>
+                                    <option selected disabled value=""> -- Select Module -- </option>
+                                    <option ng-repeat="module in modulemodel" value="{{ module.mod_id}}">{{ module.mod_name}}</option>
+                                </select>
+                                <span style="color:red;" ng-show="form.module.$touched && form.module.$invalid||submitted && form.module.$error.required">Module is required.</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Status: <span class="red">*</span></label>
+                                <select class="form-control" ng-model="bugmodel.bug_stat_id" id="statname" name="status" required>
+
+                                    <option selected disabled value=""> -- Select status -- </option>
+                                    <option ng-repeat="status in statusmodel" value="{{ status.status_id}}">{{ status.status_name}}</option>
+                                </select>
+                                <span style="color:red;" ng-show="form.status.$touched && form.status.$invalid || submitted&&form.status.$error.required">Status is required.</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Attachments:</label>
+                                <div class="input-group">
+
+                                    <input type="text" class="form-control" ng-model="bugmodel.bug_attachment" readonly>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary">
+                                            Browse &hellip;
+                                            <input id="fileselect" name="fileselect[]" onchange="angular.element(this).scope().getFileDetails(this)" type="file" multiple="true" style="display: none;">
+                                        </span>
+                                    </label>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Bug Description: <span class="red">*</span></label>
+                                <textarea rows="11" name="Description" class="form-control" id="bugdesc" ng-model="bugmodel.bug_description" maxlength="500" placeholder="Enter bug Description" required></textarea>
+                                <span style="color:red;" ng-show="form.Description.$touched && form.Description.$invalid|| submitted&&form.Description.$error.required">Bug description is required.</span>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="reset" value="CANCEL" class="btn btn-danger" data-dismiss="modal" ng-click="cancel('bugEdit','none')">
+                <input type="submit" value="ADD" data-dismiss="modal" class="btn btn-primary" ng-click="submitted=true;Add(form)" ng-show="isEdit" />
+                <input type="submit" value="UPDATE" data-dismiss="modal" class="btn btn-primary" ng-click="Update(form)" ng-hide="isEdit" />
+                <input type="submit" value="HISTORY" class="btn btn-primary pull-left" ng-hide="isEdit" data-toggle="modal" data-target="#historyBug" ng-click="getHistory()" />
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="historyBug" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Bug History</h4>
+            </div>
+            <div class="modal-body-history">
+
+                
+                <div class="row">
+                    
+                        <div class="panel panel-login">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <a href="#" class="active" id="bug-time-line">Timeline</a>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <a href="#" ng-click="getComments()" id="bug-comments">Comments</a>
+                                    </div>
+                                </div><!--row-->
+                                <hr>
+                            </div><!--panel-heading-->
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <div class="timeline" id="time-line" style="display: block;">
+
+                                            <div class="line text-muted"></div>
+
+                                            <div class="separator text-muted">
+                                                <time></time>
+                                            </div><!-- /Separator -->
+                                            <div ng-repeat="hist in History">
+                                                <article class="panel {{hist.paneltype}}" id="panel">
+
+                                                    <!-- Icon -->
+                                                    <div class="panel-heading icon">
+                                                        <i class="glyphicon {{hist.icontype}}" id="icon"></i>
+                                                    </div>
+                                                    <!-- /Icon -->
+                                                    <div class="panel-heading">
+                                                        <h2 class="panel-title"> <span style="font-size:20px"> @ </span> {{hist.user.user_username || hist.user.user_emailid}} </h2>
+                                                        <time>{{hist.hist_createddate}}</time>
+                                                    </div>
+                                                    <!-- Body -->
+                                                    <div class="panel-body">
+                                                        <strong ng-show="hist.show"> {{hist.hist_action}}. </strong>
+                                                        <strong ng-hide="hist.show"> {{hist.hist_action}} from <span ng-style="getStyle1(hist.hist_pstat_id)">{{hist.pstatus_name.status_name}}</span> to <span ng-style="getStyle1(hist.hist_stat_id)">{{hist.status_name.status_name}}</span></strong>
+                                                    </div>
+                                                    <!-- /Body -->
+                                                </article><!-- /Panel -->
+
+                                            </div>
+                                            <article class="panel panel-info panel-outline">
+
+                                                <!-- Icon -->
+                                                <div class="panel-heading icon" style="background-color:#2D3E50;">
+                                                    <i class="glyphicon glyphicon-info-sign" style="color:#EFBB00"></i>
+                                                </div>
+                                                <!-- /Icon -->
+                                                <!-- Body -->
+                                                <div class="panel-body">
+                                                    That is all.
+                                                </div>
+                                                <!-- /Body -->
+
+                                            </article>
+                                            </article><!-- /Panel -->
+
+                                            <div class="separator text-muted">
+                                                <!--<time>26. 3. 2015</time>-->
+                                            </div><!-- /Separator -->
+
+                                        </div>
+
+                                                <div class="timeline" id="bug-comm" style="display: none;">
+
+                                                    <!--<div class="row">
+                                                        <div class="col-md-12 col-xs-12 form-group">
+                                                            <label for="pwd">Add Comment:</label><br />
+                                                            <textarea class="form-control" rows="3" ng-model="commentmodel.com_description"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                   
+
+                                                    <div>
+                                                        <input type="hidden" id="logo" ng-model="commentmodel.com_attatch" />
+                                                        <img ng-src="{{commentmodel.attachmentpath}}" src="{{commentmodel.attachmentpath}}" alt="{{commentmodel.com_attatch}}" style="height:70px;width:70px" />
+
+                                                    </div>
+                                                    <div>
+
+                                                        <span class="btn btn-default btn-file">
+                                                          <input type="file" class="form-control" onchange="angular.element(this).scope().getFileDetails1(this)">
+                                                        </span>
+
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-12 col-xs-12 text-right">
+                                                            <button type="button" class="btn-labeled btn-success" id="btn" ng-click="comment()">
+                                                                <span class="btn-labels"><i class="fa fa-paper-plane" aria-hidden="true"></i></span>Submit Comment
+                                                            </button>
+                                                        </div>
+                                                    </div>-->
+
+
+                                                    <div class="row">
+                                                        <div class="col-sm-12 x_title">
+                                                            <h3> Comments </h3>
+                                                        </div><!-- /col-sm-12 -->
+                                                    </div><!-- /row -->
+                                                    <div class="ui comments">
+                                                        <div class="comment" ng-repeat="com in Comments">
+                                                            <a class="avatar">
+                                                                <img src="{{com.logopath}}">
+                                                                <!-- https://semantic-ui.com/images/avatar/small/joe.jpg -->
+                                                            </a>
+                                                            <div class="content">
+                                                                <a class="author">{{com.user_username}}</a>
+                                                                <div class="metadata">
+                                                                    <div class="date">{{com.com_createddate}}</div>
+                                                                </div>
+                                                                <div class="text" ng-hide='showInput'>
+                                                                    <!--This will be great for business reports. I will definitely download this.-->
+                                                                    {{com.com_description}}
+                                                                </div>
+                                                                <div class="text" style="width: 97.5%;">
+                                                                    <input class="form-control" ng-show='showInput' ng-model="commodel.com_description" />
+                                                                </div>
+                                                                <div class="actions">
+                                                                    <a class="reply" ng-hide='showInput' ng-click='showInput = !showInput;enableEditor(com)'>Edit</a>
+                                                                    <a class="save" ng-show='showInput' ng-click='UpdateComment(com)'>Save</a>
+                                                                    <a class="cancel" ng-show='showInput' ng-click='showInput=false'>Cancel</a>
+                                                                    <a class="attatch" ng-hide='showInput' ng-if="com.com_attatch" href="{{com.attachmentpath}}" _TARGET="_self" ng-click="downloadFile(com)" >Attatchment</a>
+                                                                   
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <!--<div id="comments">
+                                                        <div class="row" ng-repeat="com in Comments">
+
+                                                            <div class="col-sm-1">
+                                                                <div class="thumbnails">
+                                                                    <img class="img-responsive user-photo" src="{{com.logopath}}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                <div class="panel panel-default">
+                                                                    <div class="comm-heading">
+                                                                        <div class="row">
+                                                                            <strong class="col-md-6">{{com.user_username}}</strong>
+                                                                            <div class="text-muted col-md-6 pull-right text-right">{{com.com_createddate}}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="panel-body">
+                                                                        <div ng-hide="editorEnabled"><b>{{com.com_description}}</b></div>
+                                                                        <input type="text" id="id1" ng-model="commodel.com_description" ng-show="editorEnabled">
+                                                                        <input type="hidden" id="logo" ng-model="com.com_attatch" />
+                                                                        <img ng-src="{{com.logopath}}" src="{{com.logopath}}" alt="{{com.com_attatch}}" style="height:70px;width:70px" />
+
+
+                                                                        <div class="pull-right"> <a ng-if="com.com_attatch" ng-href="{{com.attachmentpath}}" class="glyphicon glyphicon-paperclip" download><img ng-src="{{hash}}"></a></div>
+                                                                        <div class="pull-right"> <a ng-click="editorEnabled=!editorEnabled;enableEditor(com)" class="glyphicon glyphicon-pencil"></a></div>
+                                                                        <div ng-show="editorEnabled">
+                                                                            <button type="button" id="id1" ng-show="editorEnabled" class="btn btn-default pull-right" ng-click="UpdateComment(com)">Update</button>
+                                                                            <button type="button" id="id1" ng-show="editorEnabled" class="btn btn-default pull-right" ng-click="cancelcomment()">Cancel</button>
+
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>-->
+                                                    <div class="row">
+                                                        <div id="watermark"><h1>{{errorMsg}}</h1></div>
+                                                    </div><!--row-->
+
+
+
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+
+
+               
+                <div class="modal-footer">
+                    <form class="ui reply form active"  id="add-comment" style="display:none;">
+                        <div class="col-md-12 col-xs-12 form-group text-left">
+                            <label for="pwd">Add Comment:</label><br />
+                            <textarea class="form-control field" ng-model="commentmodel.com_description"></textarea>
+                        </div>
+                        <div class="input-group form-group" style="padding-left: 15px; padding-right: 15px;">
+                            <input type="text" class="form-control" ng-model="commentmodel.com_attatch">
+                            <label class="input-group-btn">
+                                <span class="btn btn-primary">
+                                    Browse &hellip;
+                                    <input type="file" id="file" name="file" ng-model="foodmodel.fileUpload" multiple
+                                           onchange="angular.element(this).scope().getFileDetails1(this)" style="display:none;" />
+                                </span>
+                            </label>
+                        </div>
+                        <!--<div class="clearfix"></div>-->
+                        <div class="col-md-2 col-xs-2">
+                            <button type="button" class="btn-labeled btn-success" id="btn" ng-click="comment()">
+                                <span class="btn-labels"><i class="fa fa-paper-plane" aria-hidden="true"></i></span>Submit Comment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        
+    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="modal fade" id="createFilter" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Filters</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-4">
+
+                                <label><b>Status:</b></label>
+                                <div ng-repeat="status in statusmodel">
+                                    <input type="checkbox" class="checked" ng-model="status.ischecked" value="{{status.status_id}}">&nbsp;&nbsp;{{status.status_name}}
+
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <label><b>Severity:</b></label>
+                                <div ng-repeat="seve in severitymodel">
+
+                                    <input type="checkbox" class="checked" ng-model="seve.ischecked" value="{{seve.seve_id}}">&nbsp;&nbsp;{{seve.seve_name}}
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label><b>Assignee:</b></label>
+                                <div ng-repeat="option in assignedUsers">
+                                    <div class="fl pl2">
+
+                                        <input type="checkbox" class="checked" ng-model="option.ischecked" value="{{ option.user_id}}">&nbsp;&nbsp;{{option.user_username == null ? option.user_emailid : option.user_username;}}
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-primary" data-dismiss="modal">Create Filter</button>-->
+                    <input type="reset" value="CANCEL" class="btn btn-danger" data-dismiss="modal" ng-click="cancel('filterEdit','none')">
+                    <input type="button" value="FILTER" class="btn btn-primary" data-dismiss="modal" id="button" ng-click="Filters()">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!--Table Export to Excel-->
+    <div id="table_wrapper" style="visibility:hidden">
+
+        <table border="1">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th style="text-align:center">BUGNAME</th>
+                    <th>MODULE</th>
+                    <th>CREATED&nbsp;ON</th>
+                    <th>ASSIGNED&nbsp;TO</th>
+                    <th colspan="3">STATUS</th>
+                    <th colspan="2">SEVERITY</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="bug in listmodel" value="{{ bug.proj_id}}">
+                    <td style="color:orangered"><strong>{{ bug.bug_id}}</strong></td>
+                    <td class="{{bug.status_name}}"><a ng-href="/#!/updatebug/{{ bug.bug_id}}">{{bug.bug_title}}</a></td>
+
+                    <td>{{bug.mod_id.mod_name}}</td>
+                    <td>{{bug.bug_createddate | date :'dd-MM-yyyy'}}</td>
+                    <td>{{bug.assignedto.user_emailid ||'---'}}</td>
+                    <td colspan="3"><select ng-style="getStyle(bug.bug_stat_id)" ng-model="bug.bug_stat_id" ng-change="onstatuschanged(bug)"><option ng-repeat="status in bugliststatusmodel" value="{{ status.status_id}}">{{status.status_name}}</option></select></td>
+                    <td colspan="2">{{bug.seve_name}}</td>
+                </tr>
+            </tbody>
+        </table><!--table-->
+
+
+    </div>
+
+    <!-- Create Filter -->
+    <div class="modal fade" id="createFilter" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Create Filter</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Enter Filter Name</label>
+                        <input class="form-control" id="exampleInputFilter" aria-describedby="emailHelp" placeholder="Enter Filter Name" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleSelect1">Select Filter Type</label>
+                        <select class="form-control" id="exampleSelect1">
+                            <option>Status</option>
+                            <option>Severity</option>
+                            <option>Assignee</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Create Filter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Filter -->
+    <div ng-repeat="bug in buglistmodel">
+        <div class="modal fade" id="attachments_{{bug.key}}" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Attachments</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="myCarousel" class="carousel slide">
+                            <!-- Indicators -->
+                            <!--<ol class="carousel-indicators">
+                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                <li data-target="#myCarousel" data-slide-to="1"></li>
+                                <li data-target="#myCarousel" data-slide-to="2"></li>
+                            </ol>-->
+                            <div class="carousel-inner">
+                                <div class="item active"><img ng-src="{{bug.attachmentpath}}" style="width:50%;margin-left:200px" alt="First slide"> </div>
+                                <!--div class="item"> <img src="http://placehold.it/900x500/666/" alt="Second slide"> </div>
+                                <div class="item"> <img src="http://placehold.it/900x500/555/" alt="Third slide"></div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

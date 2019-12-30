@@ -1,0 +1,53 @@
+﻿
+<div class="row">
+    <div class="col-md-12">
+        <div class="mbox box-primary">
+            <form role="form" name="form" novalidate>
+
+                <div class="box-header with-border">
+
+                    <h1 class="box-title">&nbsp;&nbsp;Add User</h1>
+                    
+                </div>
+                <br />
+                <!-- /.box-header -->
+                <!-- form start -->
+
+                <div class="box-body col-md-6 col-md-offset-3">
+                    <div class="form-group">
+                        <label id="lblEmail">Email</label>
+                        <span style="color:red">*</span>
+                        <input class="form-control input-sm" type="email" id="txtEmail" name="txtEmail" maxlength="80" ng-model="userlistmodel.user_emailid" title="Contact's email (format: xxx@xxx.xxx)"
+                               ng-pattern='/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i' required />
+
+                        <span style="color:red;" ng-show="submitted&&form.txtEmail.$error.required||form.txtEmail.$touched && form.txtEmail.$invalid">Email Address is required.</span>
+                        <span style="color:red" ng-show="form.txtEmail.$error.pattern">Please enter valid email address.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="User role">User Role <span style="color:red">*</span></label><br />
+                        <select class="btn btn-default dropdown-toggle" style="width:100%;background-color:white" data-toggle="dropdown" id="userrole" name="Region" ng-model="userlistmodel.user_usertype" required>
+                            <option selected disabled value=""> -- Select User Role -- </option>
+                            <option selected value="Manager">Manager </option>
+                            <option selected value="Employee"> Employee </option>
+                            <option selected value="Contractor"> Contractor </option>
+                        </select>
+                        <span style="color:red" ng-show="form.Region.$error.pattern">Please Enter only character here..!</span>
+                        <span style="color:red" ng-show="form.Region.$touched && form.Region.$invalid || submitted&&form.Region.$error.required"> User Role is required..</span>
+                    </div>
+                </div>
+            </form>
+            <div class="box-footer">
+                <button type="submit" class="btn btn-default pull-right" ng-click="Cancel()">Cancel</button>&nbsp&nbsp&nbsp
+                <button type="button" class="btn btn-primary pull-right" ng-click="submitted=true;Add(form)">Add</button><br /><br />
+            </div>
+
+        </div>
+        <!--<div id="overlay">
+            <div class="row">
+                <div class="col-md-2 col-md-offset-5">
+                    <div class="loader"></div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+</div>

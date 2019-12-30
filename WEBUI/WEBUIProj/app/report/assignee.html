@@ -1,0 +1,48 @@
+﻿
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3> Assignee Report </h3>
+            <hr>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <!--<h4>Assignee report</h4>-->
+
+                <div id="container" class="col-md-6" style="min-height:310px; height:400px; margin-top:30px; "></div>
+
+                <!--<div class="row">
+                    <div id="piechart" class="col-sm-6" style="height:600px; width:700px;">
+                 </div>-->
+
+                <div class="col-sm-6">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="background-color:white;width:80%;margin-left:50px;margin-top:50px; ">
+
+                            <thead class="table-head">
+                                <tr>
+                                    <th width="574">Assignee</th>
+                                    <th width="512">Count</th>
+                                </tr>
+                            </thead>
+
+                            <tbody style="color:black">
+
+                                <tr ng-repeat="counts in AssigneeReports[0].assignee">
+                                    <td class="assignee"><b>{{counts.name == null ? counts.user_emailid : counts.name;}}</b></td>
+                                    <td class="count"><b>{{counts.y == null ? '0' : counts.y;}}</b></td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+

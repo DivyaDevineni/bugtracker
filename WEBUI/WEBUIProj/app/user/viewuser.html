@@ -1,0 +1,135 @@
+﻿
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+
+
+            <h3>Users List</h3>
+            <hr>
+            <div class="notifications pull-right padbot10">
+                <ul>
+                    <li><a id='btnUser' href='' ng-click="addUser()"><i class="fa fa-file"></i> Add New User</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row padbot15">
+        <div class="col-md-12 no-padding">
+            <div class="col-md-4 col-sm-6" ng-repeat="users in userlistmodel">
+                <div class="well">
+                    <div class="pull-left"><img ng-src="{{users.logopath}}" class="img-circle img-responsive profile-pic" alt="{{users.logo}}" /></div>
+                    <div class="profile-details clearfix pull-left">
+                        <h4>{{users.user_username}}</h4>
+                        <p>{{users.puser_role}}</p>
+                        <p>{{users.user_emailid}}</p>
+                        <p><a id='btnUser' ng-click="editUser(users)"><i class="fa fa-pencil"></i></a> <a ng-click="Delete(users,false)"><i class="fa fa-times"></i></a></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div><br>
+
+</div>
+<div class="container-fluid">
+    <div class="col-md-12 grBox animated fadeIn" id="userEdit" style="margin-top:15px; display:none;">
+        <div class="col-md-12">
+            <h3>{{ !isEdit? 'Add User' : 'Update User' }}</h3>
+            <!--<h3 ng-show="showheader">Edit User</h3>-->
+            <hr>
+        </div>
+        <div class="col-md-12">
+            <form role="form" name="form" novalidate>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>First Name:</label>
+                            <input type="text" class="form-control" id="fname" name="fname" ng-model="usermodel.user_firstname" maxlength="15" ng-pattern="/^[a-zA-Z\ ]*$/">
+                            <span style="color:red" ng-show="form.fname.$error.pattern">Please enter only alphabets.</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Email ID: <span class="red">*</span></label>
+                            <input class="form-control input-sm" type="email" id="txtEmail" name="txtEmail" maxlength="80" ng-model="usermodel.user_emailid" title="Contact's email (format: xxx@xxx.xxx)"
+                                   ng-pattern='/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i' required />
+
+                            <span style="color:red;" ng-show="submitted&&form.txtEmail.$error.required||form.txtEmail.$touched && form.txtEmail.$invalid">Email Address is required.</span>
+                            <span style="color:red" ng-show="form.txtEmail.$error.pattern">Please enter valid email address.</span>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Last Name:</label>
+                            <input type="text" class="form-control" id="lname" name="lname" ng-model="usermodel.user_lastname" maxlength="15" ng-pattern="/^[a-zA-Z\ ]*$/">
+                            <span style="color:red" ng-show="form.lname.$error.pattern">Please enter only alphabets.</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Upload Photo:</label>
+                            <div class="input-group">
+
+                                <input type="text" class="form-control" ng-model="usermodel.user_logo" readonly>
+                                <label class="input-group-btn">
+                                    <span class="btn btn-primary">
+                                        Browse &hellip;
+                                        <input id="fileselect" name="fileselect[]" onchange="angular.element(this).scope().getFileDetails(this)" type="file" style="display: none;">
+                                    </span>
+                                </label>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <!--<div class="form-group">
+                            <label>Status: <span class="red">*</span></label>
+                            <select class="form-control">
+                                <option selected>-- Select --</option>
+                                <option>Active</option>
+                                <option>InActive</option>
+                            </select>
+                        </div>-->
+                        <!--<div class="form-group">
+                            <label for="pname" id="pname">Project Name: <span class="red">*</span></label>
+                            <input type="text" class="form-control" id="pname" name="pname" ng-model="projmodel.proj_name" ng-pattern="/^[a-zA-Z0-9_\s]*$/" required />
+                            <span style="color:red" ng-show="form.pname.$touched && form.pname.$invalid || submitted&&form.pname.$error.required"> Name is required..</span>
+                            <span style="color:red" ng-show="form.pname.$error.pattern">Please enter valid project title.</span>
+
+                        </div>-->
+                        <div class="form-group">
+                            <label for="User Name">User Name:<span class="red">*</span></label><br>
+                            <input type="text" class="form-control" id="uname" name="uname" ng-model="usermodel.user_username" maxlength="15" ng-pattern="/^[a-zA-Z0-9\_]*$/" required>
+                            <span style="color:red" ng-show="form.uname.$touched && form.uname.$invalid || submitted&&form.uname.$error.required"> Username required..</span>
+                            <span style="color:red" ng-show="form.uname.$error.pattern">Invalid format.</span>
+
+                        </div>
+                        <div class="form-group" ng-if="show">
+                            <label>User Role: <span class="red">*</span></label>
+                            <select class="btn btn-default dropdown-toggle" style="width:100%;background-color:white" data-toggle="dropdown" id="userrole" name="Region" ng-model="usermodel.user_usertype" required>
+                                <option selected disabled value=""> -- Select User Role -- </option>
+                                <option selected value="Manager">Manager </option>
+                                <option selected value="Employee"> Employee </option>
+                                <option selected value="Contractor"> Contractor </option>
+                            </select>
+
+                            <span style="color:red" ng-show="form.Region.$touched && form.Region.$invalid || submitted&&form.Region.$error.required"> User Role is required..</span>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+            <hr>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12">
+            <div class="no-padding col-lg-6 col-md-12 col-sm-12 pull-right text-right">
+                <input type="reset" value="CANCEL" class="btn btn-danger" ng-click="cancel('userEdit','none')">
+                <input type="button" value="ADD" ng-if="btn" class="btn btn-primary" ng-click="submitted=true;save(form)">
+                <input type="button" value="UPDATE" ng-if="btn1" class="btn btn-primary" ng-click="update()">
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,93 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="mbox box-primary">
+            <div class="box-header with-border">
+                <h1 class="box-title">Edit User</h1>
+               
+                  <button type="button" class="btn btn-primary pull-right" ng-click="changepassword()">Change Password</button>
+
+               
+                <!--<div class="pull-right">
+                <label for="sel1"></label>
+                <select class="form-control" id="proj" ng-change="onprojectchanged()" ng-model="userlistmodel.user_proj_id">
+                    <option selected value=""> -- Select Project  -- </option>
+                    <option ng-repeat="proj in projlistmodel" value="{{ proj.proj_id}}">{{ proj.proj_name}}</option>
+                </select>
+                    </div>-->
+            </div>
+
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" name="form" novalidate>
+                <br />
+                <div class="row" style="margin-left:5%">
+                    <div class="box-body col-md-4">
+                        <label for="First Name">First Name:</label><br>
+                        <input type="text" class="form-control" id="fname" name="fname" ng-model="userlistmodel.user_firstname" maxlength="15" ng-pattern="/^[a-zA-Z\ ]*$/">
+                        <span style="color:red" ng-show="form.fname.$error.pattern">Please enter only alphabets.</span>
+                    </div>&nbsp&nbsp&nbsp&nbsp
+                    <div class="box-body col-md-4">
+                        <label for="Last Name">Last Name:</label><br>
+                        <input type="text" class="form-control" id="lname" name="lname" ng-model="userlistmodel.user_lastname" maxlength="15" ng-pattern="/^[a-zA-Z\ ]*$/">
+                        <span style="color:red" ng-show="form.lname.$error.pattern">Please enter only alphabets.</span>
+
+                    </div>
+                </div><br>
+                <div class="row" style="margin-left:5%">
+                    <div class="col-md-4">
+                        <label for="User Name">User Name:</label><br>
+                        <input type="text" class="form-control" id="uname" name="uname" ng-model="userlistmodel.user_username" maxlength="15" ng-pattern="/^[a-zA-Z0-9\_]*$/">
+                        <span style="color:red" ng-show="form.uname.$error.pattern">Invalid format.</span>
+                    </div>&nbsp&nbsp&nbsp&nbsp
+                    <div class="col-md-4">
+                        <label for="Email">Email:</label><br>
+                        <input type="email" class="form-control" id="email" ng-model="userlistmodel.user_emailid" name="txtEmail" maxlength="50" title="Contact's email (format: xxx@xxx.xxx)"
+                               ng-pattern='/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i' ng-disabled="isdisable" required />
+                        <span style="color:red;" ng-show="submitted&&form.txtEmail.$error.required||form.txtEmail.$touched && form.txtEmail.$invalid">Email Address is required.</span>
+                        <span style="color:red" ng-show="form.txtEmail.$error.pattern">Please enter valid email address.</span>
+
+                    </div>
+                </div><br>
+                <div class="row" style="margin-left:5%">
+                    <div class="col-md-4">
+                        <label for="mobileno">Mobile Number:</label><br>
+                        <input type="text" class="form-control" id="mobno" name="mobno" ng-model="userlistmodel.user_mobilenumber" ng-pattern="/^[0-9]{10}$/" maxlength="10">
+                        <span style="color:red" ng-show="form.mobno.$error.pattern">Please enter 10 digit Numbers only.</span>
+
+                    </div>
+                </div><br />
+            </form>
+
+
+            <div class="form-group" style="margin-left:6%" ;>
+                <label id="lbllogo">Logo&nbsp;(70 * 70px) </label>
+                <div>
+                    <input type="hidden" id="logo" ng-model="userlistmodel.user_logo" />
+                    <img ng-src="{{userlistmodel.imgpath}}" src="{{userlistmodel.logopath}}" alt="{{userlistmodel.user_logo}}" style="height:70px;width:70px" />
+
+
+
+                </div>
+                <div>
+                    <input type="file" id="file" name="file" ng-model="foodmodel.fileUpload" multiple
+                           onchange="angular.element(this).scope().getFileDetails(this)" />
+                    <input type="button" ng-click="uploadFiles()" value="Upload" />
+                    <!--ADD A PROGRESS BAR ELEMENT.-->
+                    <p><progress id="pro" value="0"></progress></p>
+                </div>
+                <div class="box-footer">
+                    <button type="button" class="btn btn-primary pull-right" ng-click="Update()">Update</button>&nbsp&nbsp&nbsp
+                    <button type="button" class="btn btn-default pull-right" ng-click="Cancel()">Cancel</button><br /><br>
+
+                </div>
+            </div><!--form-group-->
+        </div>
+        <!--<div id="overlay">
+            <div class="row">
+                <div class="col-md-2 col-md-offset-5">
+                    <div class="loader"></div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+</div>

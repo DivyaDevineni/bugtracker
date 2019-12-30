@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bugapi", "bugapi\bugapi.csproj", "{9E44D6DA-3A84-4985-80F2-C1189699F47F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEBUI", "WEBUI\WEBUIProj\WEBUI.csproj", "{55CA6CC0-2F28-4C1A-929A-4F92EEC7D86D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E44D6DA-3A84-4985-80F2-C1189699F47F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E44D6DA-3A84-4985-80F2-C1189699F47F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E44D6DA-3A84-4985-80F2-C1189699F47F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E44D6DA-3A84-4985-80F2-C1189699F47F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55CA6CC0-2F28-4C1A-929A-4F92EEC7D86D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55CA6CC0-2F28-4C1A-929A-4F92EEC7D86D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55CA6CC0-2F28-4C1A-929A-4F92EEC7D86D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55CA6CC0-2F28-4C1A-929A-4F92EEC7D86D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://kcs-tfs.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = bugapi\\bugapi.csproj
+		SccProjectName1 = bugapi
+		SccLocalPath1 = bugapi
+		SccProjectUniqueName2 = WEBUI\\WEBUIProj\\WEBUI.csproj
+		SccProjectName2 = WEBUI/WEBUIProj
+		SccLocalPath2 = WEBUI\\WEBUIProj
+	EndGlobalSection
+EndGlobal

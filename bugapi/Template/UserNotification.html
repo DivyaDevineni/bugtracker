@@ -1,0 +1,41 @@
+﻿
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Email Template</title>
+    <style>
+        table.one {
+            border-color: #5F8cb5;
+        }
+
+        td.two {
+            border-color: #5F8cb5;
+            border-top-color: lightblue;
+        }
+    </style>
+
+</head>
+
+<body>
+    <table class="one" width="400" border="1px #5F8cb5" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+            <th align="center" border 1px solid #ddd; bgcolor="#002060"><h2 style="color:white">Added to project</h2></th>
+        </tr>
+        <tr>
+            <td valign="top" border 1px solid #ddd; style="font-family:Calibri; font-size:13px; color:#000000; padding:10px;">
+
+                <br /> Hello {{#emailid#}} ! <br /> Welcome onboard.<br /> You are added for a new project <br />{{#projname#}}.<br> <!--Please login in with the below credentials. <br /> <br /> Your Username: {{#emailid#}} <br />-->
+                <!--Your Temporary Password: {{#password#}} <br />-->
+                <!--<br />Click here to  <a href="http://localhost:1888/#!/signup">signup </a>-->
+                <br /> Thanks, <br /> 
+                </p><br /> <h6 valign="bottom" style="color:gray" align="center">This is system generated email. Please do not reply to this message.</h6>
+
+            </td>
+        </tr>
+
+
+
+    </table>
+
+</body>
+</html>

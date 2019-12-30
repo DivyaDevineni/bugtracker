@@ -1,0 +1,290 @@
+﻿<style>
+    .mbox.box-primary {
+        border-top-color: #3c8dbc;
+    }
+
+    .mbox {
+        position: relative;
+        border-radius: 3px;
+        background: #ffffff;
+        border-top: 3px solid #d2d6de;
+        margin-bottom: 20px;
+        width: 100%;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    }
+</style>
+<div class="mbox box-primary">
+    <div class="box-header with-border">
+
+        <div class="container">
+            <!--style="width:80%"-->
+
+            <div class="page-header">
+                <!--<h3 class="box-title">Update Bugs</h3>-->
+                <div class="row">
+                    <div class="col-md-6">
+                        <h1 class="box-title">Update Bug</h1>
+                    </div><!--col-md-6-->
+                </div><!--row-->
+            </div><!--page header-->
+
+            <div class="row">
+                <div class="col-md-7 col-md-offset-1">
+                    <form role="form" name="form" novalidate>
+
+                        <div class="form-group row">
+                            <div class="col-xs-12">
+                                <label for="bugtitle" id="bugtitle">Bug Title:<span style="color:red">*</span></label>
+                                <input type="text" class="form-control" id="bugtitle" name="bugtitle" ng-model="buglistmodel.bug_title" maxlength="150" required>
+                                <span style="color:red;" ng-show="form.bugtitle.$touched && form.bugtitle.$invalid||submitted&&form.bugtitle.$error.required">Bug title is required.</span>
+                                <span style="color:red" ng-show="form.bugtitle.$error.pattern">Please enter valid bug title.</span>
+                            </div><!--col-xs-6-->
+                        </div><!--bugtitle-->
+                        <div class="form-group">
+                            <label for="pwd">Bug Description:<span style="color:red">*</span></label><br>
+                            <textarea class="form-control" rows="3" id="bugdesc" name="bugdesc" ng-model="buglistmodel.bug_description" maxlength="500" required></textarea>
+                            <span style="color:red;" ng-show="form.bugdesc.$touched && form.bugdesc.$invalid||submitted&&form.bugdesc.$error.required">Bug Description is required.</span>
+                        </div><!--Bug Description-->
+
+                        <div class="form-group row">
+
+                            <div class="col-xs-6">
+                                <label for="sel1">Change Status:<span style="color:red">*</span></label>
+                                <select class="form-control" ng-model="buglistmodel.bug_stat_id">
+                                    <option ng-repeat="status in statusmodel" value="{{ status.status_id}}">{{ status.status_name}}</option>
+                                </select>
+                            </div><!--col-xs-6-->
+
+                            <div class="col-xs-6">
+                                <label for="sel1">Assigned To:</label>
+                                <select class="form-control" ng-model="buglistmodel.bug_assignedto">
+                                    <option ng-repeat="option in assignedusers" value="{{ option.user_id}}">{{ option.user_emailid}}</option>
+                                </select>
+                            </div><!--col-xs-6-->
+
+                        </div><!--form-group row-->
+
+                        <div class="form-group row">
+                            <div class="col-xs-6">
+                                <label for="sel1">Module:</label>
+                                <select class="form-control" ng-model="buglistmodel.bug_mod_id" id="modname">
+                                    <option ng-repeat="module in modulemodel" value="{{ module.mod_id}}">{{ module.mod_name}}</option>
+                                </select>
+                            </div><!--col-xs-6-->
+                            <div class="col-xs-6">
+                                <label for="sel1">Severity:<span style="color:red">*</span></label>
+                                <select class="form-control" ng-model="buglistmodel.bug_sev_id">
+
+                                    <option ng-repeat="severity in severitymodel" value="{{ severity.seve_id}}">{{ severity.seve_name}}</option>
+                                </select>
+                            </div><!--col-xs-6-->
+                        </div><!--form-group row-->
+
+                        <div class="form-group row">
+                            <div class="col-xs-12">
+                                <label for="ex3">Attached File:</label>&nbsp;<br>
+
+                                {{buglistmodel.bug_attachment}}
+
+
+                                <a ng-if="buglistmodel.bug_attachment" ng-href="{{buglistmodel.attachmentpath}}" class="glyphicon glyphicon-paperclip" download><img ng-src="{{hash}}"></a>
+                            </div>
+                        </div>
+
+                        <div class="box-footer">
+                            <button type="button" class="btn btn-primary pull-right" ng-click="submitted=true;Update(form)"> Update</button>
+                            <button type="button" class="btn btn-default pull-right" ng-click="Cancel()">Cancel</button>
+
+                        </div><!--box-footer-->
+
+                        <div class="form-group">
+
+                            <div class="container">
+
+
+
+
+                                <div class="row x_title"></div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-xs-12 form-group">
+                                        <label for="pwd">Add Comment:</label><br />
+                                        <textarea class="form-control" rows="3" ng-model="commentmodel.com_description"></textarea>
+                                    </div><!--col-md-12 col-xs-12 form-group-->
+                                </div><!--row-->
+                                <div>
+                                    <input type="hidden" id="logo" ng-model="commentmodel.com_attatch" />
+                                    <img ng-src="{{commentmodel.attachmentpath}}" src="{{commentmodel.attachmentpath}}" alt="{{commentmodel.com_attatch}}" style="height:70px;width:70px" />
+
+                                </div>
+                                <div>
+
+                                    <span class="btn btn-default btn-file">
+                                        <b>Browse</b><input type="file" class="form-control" onchange="angular.element(this).scope().getFileDetails(this)">
+                                    </span>
+                                    <!--<input type="file" id="file" name="file" ng-model="foodmodel.fileUpload" multiple
+                                           onchange="angular.element(this).scope().getFileDetails(this)" />-->
+                                    <!--<input type="button" ng-click="uploadCommentFiles()" value="Upload" />-->
+                                    <!--ADD A PROGRESS BAR ELEMENT.-->
+                                    <!--<p><progress id="pro1" value="0"></progress></p>-->
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-xs-12 text-right">
+                                        <button type="button" class="btn-labeled btn-success" id="btn" ng-click="comment()">
+                                            <span class="btn-labels"><i class="fa fa-paper-plane" aria-hidden="true"></i></span>Submit Comment
+                                        </button>
+                                    </div><!--col-md-12 col-xs-12 text-right-->
+                                </div><!--row-->
+
+
+                                <div class="row">
+                                    <div class="col-sm-12 x_title">
+                                        <h3> Comments </h3>
+                                    </div><!-- /col-sm-12 -->
+                                </div><!-- /row -->
+
+                                <div id="comments">
+                                    <div class="row" ng-repeat="com in Comments">
+
+                                        <div class="col-sm-1">
+                                            <div class="thumbnails">
+                                                <img class="img-responsive user-photo" src="{{com.logopath}}">
+                                            </div><!-- /thumbnails -->
+                                        </div><!-- /col-sm-1 -->
+
+                                        <div class="col-sm-10">
+                                            <div class="panel panel-default">
+                                                <div class="comm-heading">
+                                                    <div class="row">
+                                                        <strong class="col-md-6">{{com.user_username}}</strong>
+                                                        <div class="text-muted col-md-6 pull-right text-right">{{com.com_createddate}}</div>
+                                                    </div><!--/row-->
+                                                </div><!--panel-heading-->
+                                                <div class="panel-body">
+                                                    <div ng-hide="editorEnabled"><b>{{com.com_description}}</b></div>
+                                                  <input type="text" id="id1" ng-model="commodel.com_description" ng-show="editorEnabled">
+                                                    <input type="hidden" id="logo" ng-model="com.com_attatch" />
+                                                    <!--<img ng-src="{{com.logopath}}" src="{{com.logopath}}" alt="{{com.com_attatch}}" style="height:70px;width:70px" />-->
+                                                    <div class="pull-right"> <a ng-if="com.com_attatch" ng-href="{{com.attachmentpath}}" class="glyphicon glyphicon-paperclip" download><img ng-src="{{hash}}"></a></div>
+                                                    <div class="pull-right"> <a  ng-click="editorEnabled=!editorEnabled;enableEditor(com)" class="glyphicon glyphicon-pencil" ></a></div>
+                                                    <div ng-show="editorEnabled">
+                                                        <button type="button" id="id1" ng-show="editorEnabled" class="btn btn-default pull-right" ng-click="UpdateComment(com)">Update</button>
+                                                        <button type="button" id="id1" ng-show="editorEnabled" class="btn btn-default pull-right" ng-click="cancelcomment()">Cancel</button>
+
+                                                    </div>
+
+
+                                                    </div><!-- /panel-body -->
+                                            </div><!-- /panel panel-default -->
+                                        </div><!-- /col-sm-10 -->
+                                    </div><!--row-->
+                                </div><!--comments-->
+                                <div class="row">
+                                    <div id="watermark"><h1>{{errorMsg}}</h1></div>
+                                </div><!--row-->
+
+
+
+                            </div><!-- /container -->
+
+                        </div><!--form-group-->
+                    </form>
+                </div>
+                <div class="col-md-4">
+                    <div class="container">
+
+                        <div class="page-header">
+                            <h2 class="text-center text-info"> Bug Timeline </h2>
+                        </div><!-- /Page header -->
+
+                        <div class="timeline">
+
+
+                            <div class="line text-muted"></div>
+
+                            <div class="separator text-muted">
+                                <!--<time>26. 3. 2015</time>-->
+                            </div><!-- /Separator -->
+                            <div ng-repeat="hist in History">
+                                <article class="panel {{hist.paneltype}}" id="panel">
+
+                                    <!-- Icon -->
+                                    <div class="panel-heading icon">
+                                        <i class="glyphicon {{hist.icontype}}" id="icon"></i>
+                                    </div>
+                                    <!-- /Icon -->
+                                    <div class="panel-heading">
+                                        <h2 class="panel-title"> <span style="font-size:20px"> @ </span> {{hist.user.user_username || hist.user.user_emailid}} </h2>
+                                    </div>
+                                    <!-- Body -->
+                                    <div class="panel-body">
+                                        <strong ng-show="hist.show"> {{hist.hist_action}}. </strong>
+                                        <strong ng-hide="hist.show"> {{hist.hist_action}} from <span ng-style="getStyle(hist.hist_pstat_id)">{{hist.pstatus_name.status_name}}</span> to <span ng-style="getStyle(hist.hist_stat_id)">{{hist.status_name.status_name}}</span></strong>
+                                    </div>
+                                    <!-- /Body -->
+                                    <!-- Footer -->
+                                    <div class="panel-footer text-right">
+                                        <b> {{hist.hist_createddate}}</b>
+                                    </div>
+                                    <!-- /Footer -->
+
+                                </article><!-- /Panel -->
+                            </div>
+
+                            <!--<article class="panel" id="panel1">
+
+
+                                <div class="panel-heading icon">
+                                    <i class="glyphicon" id="icon1"></i>
+                                </div>
+
+                                <div class="panel-heading">
+                                    <h2 class="panel-title">New content added</h2>
+                                </div>
+
+                                <div class="panel-body">
+                                    Some new content has been added.
+                                </div>
+
+                                <div class="panel-footer">
+                                    <small>Footer is also supported!</small>
+                                </div>
+
+                            </article>-->
+                            <!-- /Panel -->
+
+
+                            <article class="panel panel-info panel-outline">
+                                <div class="panel-heading icon">
+                                    <i class="glyphicon glyphicon-info-sign"></i>
+                                </div><!-- /Icon -->
+                                <div class="panel-body">
+                                    That is all.
+                                </div><!-- /Body -->
+
+                            </article><!-- /Panel -->
+
+                            <div class="separator text-muted">
+                                <!--<time>26. 3. 2015</time>-->
+                            </div><!-- /Separator -->
+
+                        </div><!-- /Timeline -->
+                    </div>
+                </div>
+            </div>
+        
+
+
+
+
+    </div><!--container-->
+        <!--<div id="overlay">
+            <div class="row">
+                <div class="col-md-2 col-md-offset-5">
+                    <div class="loader"></div>
+                </div>
+            </div>
+        </div>-->
+</div><!--box-header with-border-->
+</div><!--mbox box-primary-->

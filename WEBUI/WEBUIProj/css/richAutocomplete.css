@@ -1,0 +1,127 @@
+.rich-autocomplete {
+    position: relative;
+     height: 27px;
+	 float:left;
+     width:100%;
+	 padding: 0px;
+
+}
+
+/*.rich-autocomplete input {
+    outline: none;
+    padding: 0px;
+    height: 100%;
+	width: 100%;
+    font-size: 12px;
+	background: url(../example/arrow.png) no-repeat right;
+	border: 1px solid #ddd;
+    height: 28px;
+	margin:0px;
+	color:#000!important;
+	border:none;
+	padding:0px 5px;
+			cursor: default;
+
+
+}
+.rich-autocomplete input:focus{
+		border: 1px solid #008080;
+
+	}*/
+
+
+.rich-autocomplete .rich-autocomplete-list {
+    position: relative;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    margin-left: -1px;
+    width: 117%;
+    z-index: 1000;
+}
+
+.rich-autocomplete .rich-autocomplete-list .rich-autocomplete-list-item,
+.rich-autocomplete .rich-autocomplete-list .rich-autocomplete-list-item-empty {
+    padding: 1px 10px !important;
+    cursor: pointer;
+    color: #333;
+	margin: 0px 0px !important;
+}
+
+/*.rich-autocomplete .rich-autocomplete-list .rich-autocomplete-list-item:hover,*/
+.rich-autocomplete .rich-autocomplete-list .rich-autocomplete-list-item.highlighted {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+/*
+    CSS Spinner
+*/
+.spinner-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 29px;
+    height: 29px;
+}
+
+
+.spinner {
+	position:relative;
+	width:26px;
+	height:26px;
+	margin:auto;
+	transform:scale(0.6);
+		-o-transform:scale(0.6);
+		-ms-transform:scale(0.6);
+		-webkit-transform:scale(0.6);
+		-moz-transform:scale(0.6);
+}
+
+.spinner-node {
+	position:absolute;
+	background-color:rgb(255,255,255);
+	height:5px;
+	width:5px;
+	border-radius:2px;
+		-o-border-radius:2px;
+		-ms-border-radius:2px;
+		-webkit-border-radius:2px;
+		-moz-border-radius:2px;
+	animation-name:f_fadeG;
+		-o-animation-name:f_fadeG;
+		-ms-animation-name:f_fadeG;
+		-webkit-animation-name:f_fadeG;
+		-moz-animation-name:f_fadeG;
+	animation-duration:1.2s;
+		-o-animation-duration:1.2s;
+		-ms-animation-duration:1.2s;
+		-webkit-animation-duration:1.2s;
+		-moz-animation-duration:1.2s;
+	animation-iteration-count:infinite;
+		-o-animation-iteration-count:infinite;
+		-ms-animation-iteration-count:infinite;
+		-webkit-animation-iteration-count:infinite;
+		-moz-animation-iteration-count:infinite;
+	animation-direction:normal;
+		-o-animation-direction:normal;
+		-ms-animation-direction:normal;
+		-webkit-animation-direction:normal;
+		-moz-animation-direction:normal;
+}
+.srchBtn {
+	float:right;
+	height:27px !important;
+	width:27px !important;
+	background: url(arrow.png) no-repeat center transparent;
+	border:none;
+	cursor:pointer;
+	}
+.srchBox{
+	height:27px;
+	border:1px solid red;
+
+	
+	}

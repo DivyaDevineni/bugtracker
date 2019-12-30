@@ -1,0 +1,27 @@
+﻿<link href="css/login.css" rel="stylesheet" />
+
+<div class="text-center"><img src="images/logo.png" alt="9Logic Inc" border="0" class="logo" /></div>
+
+<div class="container">
+    <div class="card card-container">
+        <img id="profile-img" class="profile-img-card" src="images/avatar_2x.png" />
+        <p id="profile-name" class="profile-name-card"></p>
+        <form class="form-signin" role="form" name="form">
+            <fieldset>
+                <span id="reauth-email" class="reauth-email"></span>
+                <input type="email" id="email" class="form-control" placeholder="Email ID" ng-model="model.user_emailid" required />
+                <input type="password" id="password" class="form-control" placeholder="Password" ng-model="model.user_password" required />
+                <div id="remember" class="checkbox">
+                    <label>
+                        <input type="checkbox" value="remember-me">
+                        Remember me
+                    </label>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block btn-signin submit" type="submit" ng-click="submitted=true; signin(form)">Sign in</button>
+            </fieldset>
+        </form>
+        <a href="#!/forgotpassword"> Forgot the password? </a> | <a href="#!/signup">Create Account</a>
+    </div>
+</div>
+<div class="text-center">2018 &copy; 9Logic Inc - All Rights Reserved.</div>
+<script type="text/javascript" src="js/modernizr.js"></script>

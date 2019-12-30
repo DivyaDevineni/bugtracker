@@ -1,0 +1,87 @@
+﻿
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3> Status Report </h3>
+            <hr>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="box">
+                <!--<h4>Status Report</h4>-->
+
+                <div id="container" class="col-md-6" style="min-height:310px; height:400px; margin-top:30px; "></div>
+                <div class="highcharts-credits" ng-hide="true"></div>
+                <!--<div class="col-md-6">
+                    <div id="piechart" style="height:600px; width:700px;"></div>
+                </div>-->
+
+                <div class="col-sm-6">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="margin-left:50px;margin-top:50px;width:80%">
+                            <thead class="table-head">
+                                <tr>
+                                    <th width="574">Status</th>
+                                    <th width="512">Count</th>
+                                </tr>
+                            </thead>
+
+                            <tr ng-repeat="stat in StatusReports[0].neww">
+                                <td class="status" style="color:black;"><b>{{stat.name}}</b></td>
+
+                                <td class="count" style="color:black;"><b>{{stat.y}}</b></td>
+                                <!--<td  ng-hide="true" class="id" style="color:black;"><b>{{stat.status_id}}</b></td>-->
+
+                            </tr>
+                            <tr ng-repeat="stat in  StatusReports[0].closed">
+                                <td class="status" style="color:black"><b>{{stat.name}}</b></td>
+
+                                <td class="count" style="color:black"><b>{{stat.y}}</b></td>
+                                <!--<td ng-hide="true" class="id" style="color:black;"><b>{{stat.status_id}}</b></td>-->
+
+                            </tr>
+                            <tr ng-repeat="stat in StatusReports[0].tobetested">
+                                <td class="status" style="color:black"><b>{{stat.name}}</b></td>
+                                <td class="count" style="color:black"><b>{{stat.y}}</b></td>
+                                <!--<td ng-hide="true" class="id" style="color:black;"><b>{{stat.status_id}}</b></td>-->
+
+                            </tr>
+                            <tr ng-repeat="stat in StatusReports[0].opened">
+                                <td class="status" style="color:black"><b>{{stat.name}}</b></td>
+                                <td class="count" style="color:black"><b>{{stat.y}}</b></td>
+                                <!--<td ng-hide="true" class="id" style="color:black;"><b>{{stat.status_id}}</b></td>-->
+
+                            </tr>
+                            <tr ng-repeat="stat in StatusReports[0].inprogress">
+                                <td class="status" style="color:black"><b>{{stat.name}}</b></td>
+                                <td class="count" style="color:black"><b>{{stat.y}}</b></td>
+                                <!--<td ng-hide="true" class="id" style="color:black;"><b>{{stat.status_id}}</b></td>-->
+
+                            </tr>
+
+                            <tr ng-repeat="stat in StatusReports[0].resolved">
+                                <td class="status" style="color:black"><b>{{stat.name}}</b></td>
+                                <td class="count" style="color:black"><b>{{stat.y}}</b></td>
+                                <!--<td ng-hide="true" class="id" style="color:black;"><b>{{stat.status_id}}</b></td>-->
+
+                            </tr>
+                            <tr ng-repeat="stat in StatusReports[0].reopen">
+                                <td class="status" style="color:black"><b>{{stat.name}}</b></td>
+                                <td class="count" style="color:black"><b>{{stat.y}}</b></td>
+                                <!--<td ng-hide="true" class="id" style="color:black;"><b>{{stat.status_id}}</b></td>-->
+
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

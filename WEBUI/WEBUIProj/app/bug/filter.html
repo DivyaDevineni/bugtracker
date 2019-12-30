@@ -1,0 +1,96 @@
+﻿
+<style>
+    .mbox.box-primary {
+        border-top-color: #3c8dbc;
+    }
+
+    .mbox {
+        position: relative;
+        border-radius: 3px;
+        background: #ffffff;
+        border-top: 3px solid #d2d6de;
+        margin-bottom: 20px;
+        width: 100%;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    }
+    .checked {
+    height: 13px;
+    width: 13px;
+    
+}
+</style>
+
+<div class="mbox box-primary">
+    <div class="box-header with-border">
+
+        <div class="container" style="width:80%">
+            <div class="page-header">
+                <h1 class="box-title">Filters</h1>
+            </div>
+
+            <div class="container">
+                <div class="">
+                    <div class="panel-body">
+                        <form class="form-inline" name="input" method="get" action="#" id="filter-tables">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="">
+                                        <div class="panel-body">
+                                            <h4 class="muted x_title">Status</h4>
+                                            <div ng-repeat="status in statusmodel">
+                                                <input type="checkbox" class="checked" ng-model="status.ischecked" value="{{status.status_id}}">&nbsp;&nbsp;{{status.status_name}}
+                                               
+                                             </div>
+                                         
+
+
+                                        </div><!--panel-body-->
+                                    </div>
+                                </div><!--col-lg-4-->
+
+                                <div class="col-lg-4">
+                                    <div class="">
+                                        <div class="panel-body">
+                                            <h4 class="muted x_title">Severity</h4>
+                                            <div ng-repeat="seve in severitymodel">
+
+                                                <input type="checkbox" class="checked" ng-model="seve.ischecked" value="{{seve.seve_id}}">&nbsp;&nbsp;{{seve.seve_name}}
+
+
+                                            </div>
+                                        </div><!--/panel-body-->
+                                    </div>
+                                </div><!--col-lg-4-->
+
+                                <div class="col-lg-4">
+                                    <div class="">
+                                        <div class="panel-body">
+                                            <h4 class="muted x_title">Assignee</h4>
+                                            <div ng-repeat="option in assignedUsers">
+                                                <div class="fl pl2">
+
+                                                    <input type="checkbox" class="checked" ng-model="option.ischecked" value="{{ option.user_id}}">&nbsp;&nbsp;{{option.user_username == null ? option.user_emailid : option.user_username;}}
+                                                </div>
+
+                                            </div>
+
+                                        </div><!--/panel-body-->
+                                    </div>
+                                </div><!--col-lg-4-->
+                            </div><!--row-->
+
+                        </form>
+                    </div><!--panel-body-->
+                </div>
+            </div><!--container-->
+
+            <div class="box-footer">
+                <button type="button" class="btn btn-primary pull-right" ng-click="Find()">Find</button>
+
+                <button type="button" class="btn btn-default pull-right" ng-click="Cancel()">Cancel</button>
+
+
+            </div><!--box-footer-->
+        </div><!--container-->
+    </div><!--box-header with-border-->
+</div><!--mbox box-primary-->

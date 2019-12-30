@@ -1,0 +1,249 @@
+﻿<!--<h3>Project List</h3>
+<div class="notifications pull-right padbot10">
+    <ul>
+        <li><a ng-click="create()" style="cursor: pointer;"><i class="fa fa-file"></i> Add New Project</a></li>
+    </ul>
+<hr>-->
+
+<div class="row">
+    <div class="col-md-12">
+        <h3> Project List </h3>
+        <hr>
+        <div class="notifications pull-right padbot10">
+            <ul>
+                <li><a ng-click="create()" style="cursor: pointer;" data-toggle="modal" data-target="#myModal"><i class="fa fa-file"></i> Add New Project</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-head">
+                    <tr>
+                        <!--<th width="58">S.No</th>-->
+                        <th width="261">Project Name</th>
+                        <th width="290">Owner</th>
+                        <th width="56">Bugs</th>
+                        <th width="116">Start Date</th>
+                        <th width="106">End Date</th>
+                        <th width="74">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="proj in projlistmodel">
+                        <!--<td>01</td>-->
+                        <td>{{ proj.proj_name}}</td>
+                        <td>{{proj.owner.user_emailid }}</td>
+                        <td><a ng-click="buglist(proj)" style="cursor: pointer;" ng-style="{'color':'red'}">{{ proj.bugcount.count}}</a></td>
+                        <td>{{proj.proj_startdate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{proj.proj_estimatedenddate | date:'dd-MM-yyyy'}}</td>
+                        <td>
+                            <a id='btnProject' ng-show="{{proj.isowner}}" data-toggle="modal" data-target="#myModal" style="cursor: pointer;" ng-click="edit(proj)">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <a ng-show="{{proj.isowner}}" style="cursor: pointer;" ng-click="delete(proj)">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <!--<tr>
+                        <td>02</td>
+                        <td>Amigos</td>
+                        <td>
+                            <div class="usage-subhead">55% Completed</div>
+                            <div class="usage">
+                                <div class="usage-bar" style="width:55%;"></div>
+                            </div>
+                        </td>
+                        <td>test21@gmail.com</td>
+                        <td>1</td>
+                        <td>01-11-2017</td>
+                        <td>30-11-2017</td>
+                        <td><a id='btnProject' href='#projectEdit' onClick='editProject();'><i class="fa fa-pencil"></i></a> <a href="javascript:;"><i class="fa fa-times"></i></a></td>
+
+                    </tr>-->
+                </tbody>
+            </table>
+        </div>
+        <!--<ul class="pagination pagination-sm pull-right">
+            <li class="disabled"><a href="#">&laquo;</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">&raquo;</a></li>
+        </ul>-->
+        <ul class="pagination pagination-sm pull-right">
+            <li><a ng-disabled="!enablePrevPage" ng-click="prevPage()">&laquo;</a></li>
+            <li class="active"><a>{{ pageNo }}</a></li>
+            <!--<li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>-->
+            <li><a ng-disabled="!enableNextPage" ng-click="nextPage()">&raquo;</a></li>
+        </ul>
+    </div>
+</div>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--<div class="container-fluid">-->
+                <!--<div class="col-md-12 grBox animated fadeIn" id="projectEdit" style="margin-top:15px; display:none;">-->
+                    <div class="modal-header">
+                        <div class="col-md-12">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h3>{{ !isEdit ? 'Add Project' : 'Update Project' }}</h3>
+                            <!--<hr>-->
+                        </div>
+                        </div>
+                    <div class="modal-body-content">
+                        <div class="col-md-12">
+                            <form role="form" name="form" novalidate>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="pname" id="pname">Project Name: <span class="red">*</span></label>
+                                            <input type="text" class="form-control" id="pname" name="pname" ng-model="projmodel.proj_name" ng-pattern="/^[a-zA-Z0-9_\s]*$/" required />
+                                            <span style="color:red" ng-show="form.pname.$touched && form.pname.$invalid || submitted&&form.pname.$error.required"> Name is required..</span>
+                                            <span style="color:red" ng-show="form.pname.$error.pattern">Please enter valid project title.</span>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Owner: <span class="red">*</span></label>
+                                            <input type="text" class="form-control" name="owner" ng-model="projmodel.user_emailid" ng-disabled="true" required />
+                                            <span style="color:red" ng-show="form.owner.$touched && form.owner.$invalid || submitted&&form.owner.$error.required"> owner is required..</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                            <label>Start Date: <span class="red">*</span></label>
+                            <div class="input-group date form_datetime pull-right" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input1">
+                                <input class="form-control" type="text" id="fromDate" value="" readonly onChange="loadData(this, $('#toDate'))" name="lblStartdate" ng-model="projmodel.proj_startdate" required>
+                                   <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                            </div>
+                                            <div>
+                                                <span style="color:red" ng-show="form.lblStartdate.$touched && form.lblStartdate.$invalid || submitted&&form.lblStartdate.$error.required">Start Date  is required</span>
+                                       </div>
+
+                        </div>
+                                        <!--<div class="form-group">
+                                            <label>Start Date: <span class="red">*</span></label>
+                                            <div class="input-group date" id='datetimepicker6'>
+                                                <input class="form-control" type="text" name="lblStartdate" ng-model="projmodel.proj_startdate" required>
+                                                <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                            </div>
+                                            <div>
+                                                <span style="color:red" ng-show="form.lblStartdate.$touched && form.lblStartdate.$invalid || submitted&&form.lblStartdate.$error.required">Start Date  is required</span>
+                                            </div>
+
+                                        </div>-->
+
+
+                                        <div class="clearfix padbot15"></div>
+                                        <div class="form-group">
+                            <label>End Date: <span class="red">*</span></label>
+                            <div class="input-group date form_datetime pull-right" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input1">
+                                <input class="form-control" type="text" id="fromDate" value="" readonly onChange="loadData(this, $('#toDate'))" name="lblEnddate" ng-model="projmodel.proj_estimatedenddate" required>
+                                   <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                            </div>
+                                            <div>
+                                                <span style="color:red" ng-show="form.lblEnddate.$touched && form.lblEnddate.$invalid || submitted&&form.lblEnddate.$error.required">End Date  is required</span>
+
+                                            </div>
+
+                        </div>
+                                        <!--<div class="form-group">
+                                            <label>End Date: <span class="red">*</span></label>
+                                            <div class="input-group date" id='datetimepicker7'>
+                                                <input class="form-control" type="text" name="lblEnddate" ng-model="projmodel.proj_estimatedenddate" required>
+                                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                            </div>
+                                            <div>
+                                                <span style="color:red" ng-show="form.lblEnddate.$touched && form.lblEnddate.$invalid || submitted&&form.lblEnddate.$error.required">End Date  is required</span>
+
+                                            </div>
+
+                                        </div>-->
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Project Overview:</label>
+                                            <textarea rows="4" name="Description" class="form-control" ng-model="projmodel.proj_description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!--<hr>-->
+                        </div>
+                    </div>
+                        <div class="clearfix"></div>
+                    <div class="modal-footer">
+                        <div class="col-md-12">
+                            <div class="no-padding col-lg-6 col-md-12 col-sm-12 pull-right text-right">
+                                <input type="reset" value="CANCEL" class="btn btn-danger" data-dismiss="modal" ng-click="Cancel()">
+                                <input type="submit" value="ADD PROJECT" ng-click="submitted=true;add(form)"  class="btn btn-primary" ng-hide="isEdit" />
+                                <input type="submit" value="UPDATE" ng-click="update()" class="btn btn-primary" data-dismiss="modal" ng-show="isEdit" />
+                                <!--<input type="button" ng-if="showBtn" value="ADD PROJECT" class="btn btn-primary" ng-click="submitted=true;add()">
+                <input type="button" ng-if="show" value="UPDATE PROJECT" class="btn btn-primary" ng-click="update()">-->
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<!--<script type="text/javascript" src="js/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+<script type="text/javascript" src="js/jquery.richAutocomplete.js" charset="UTF-8"></script>-->
+<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+<link href="../../css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<!--<script src="../../js/moment.js"></script>
+<script src="../../js/bootstrap-datetimepicker.js"></script>
+<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>-->
+<script type="text/javascript">
+        $('.form_datetime').datetimepicker({
+            format: "mm/dd/yyyy",
+            language:  'fr',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1,
+            minView: 4,
+        });
+        $(".form_datetime").datetimepicker("setDate", new Date());
+        $('.form_datetime1').datetimepicker({
+            format: "mm/dd/yyyy   HH:ii P",
+            language:  'fr',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1,
+        });
+        //$(function () {
+        //    $('#datetimepicker6').datetimepicker();
+        //    $('#datetimepicker7').datetimepicker({
+        //        useCurrent: false //Important! See issue #1075
+        //    });
+        //    $("#datetimepicker6").on("dp.change", function (e) {
+        //        $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+        //    });
+        //    $("#datetimepicker7").on("dp.change", function (e) {
+        //        $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        //    });
+        //});
+</script>

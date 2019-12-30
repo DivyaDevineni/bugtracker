@@ -1,0 +1,106 @@
+﻿ <div class="mbox box-primary">
+    <div class="box-header with-border">
+
+        <div class="container" style="width:100%">
+            <div class="page-header">
+                <!--<h3 class="box-title">Bug List</h3>-->
+                <div class="row">
+                    <div class="col-md-6..">
+                        <h1 class="box-title">&nbsp;Bug List</h1>
+                   
+                    <div style="float:right;position:relative;"><button type="button" class="btn btn-default" ng-click="ClearFilter()">ClearFilter</button></div>
+                    <div style="float:right;position:relative;"><button type="button" class="btn btn-primary" ng-click="Filter()">Filter</button></div>
+                    <div style="float:right;position:relative;"><button type="button" class="btn btn-primary" ng-click="bug()">Add Bug</button></div>
+                    <div style="float:right;position:relative;"><button type="button"  ng-show="list" class="btn btn-primary" ng-click="buglist()"> BugList</button></div>
+                     </div><!--col-md-6-->
+                </div><!--row-->
+            </div><!--page-header-->
+
+        </div><!--container-->
+
+        
+
+        <!--<i class="fa fa-file-excel-o fa-2x" aria-hidden="true" style="color:forestgreen" title="Download as Excel" id="btnExport"></i>-->
+        <button type="button" class="btn-success" title="Download as Excel" id="btnExport"><b>Export to Excel</b></button>
+        <table class="table table-hover">
+
+            <thead class="bg-primary">
+                <tr>
+                    <th style="color:white;">ID</th>
+                    <th style="color:white;">BUGNAME</th>
+                    <th style="color:white;">MODULE</th>
+                    <th style="color:white;">CREATED&nbsp;ON</th>
+                    <th style="color:white;">ASSIGNED&nbsp;TO</th>
+                    <th style="color:white;">STATUS</th>
+                    <th style="color:white;">SEVERITY</th>
+                    <th style="color:white;">ATTACHMENT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="bug in buglistmodel" value="{{ bug.proj_id}}">
+                    <td style="color:orangered"><strong>{{ bug.bug_id}}</strong></td>
+                    <td class="{{bug.status_name}}"><a ng-href="/#!/updatebug/{{ bug.bug_id}}">{{bug.bug_title}}</a></td>
+
+                    <td>{{bug.mod_id.mod_name}}</td>
+                    <td>{{bug.bug_createddate | date :'dd-MM-yyyy'}}</td>
+                    <td>{{bug.assignedto.user_emailid ||'---'}}</td>
+                    <td><select  class="btn btn-xs dropdown-toggle" data-toggle="dropdown" ng-style="getStyle(bug.bug_stat_id)" ng-model="bug.bug_stat_id" ng-change="onstatuschanged(bug)"><option ng-repeat="status in statusmodel" value="{{ status.status_id}}">{{status.status_name}}</option></select></td>
+                    <td>{{bug.seve_name}}</td>
+                    <td><a ng-if="bug.bug_attachment" ng-href="{{bug.attachmentpath}}" class="glyphicon glyphicon-paperclip" download><img ng-src="{{hash}}"></a></td>
+                </tr>
+            </tbody>
+        </table><!--table-->
+
+
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-6 pull-right">
+                <div class="form-inline pull-right">
+                    <button type="button" ng-show="show" class="btn bg-navy form-group" ng-disabled="!enablePrevPage" ng-click="prevPage()"><i class="fa fa-angle-double-left" aria-hidden="true"></i> </button>
+                    <button type="button" ng-show="show1" class="btn btn-default" ng-disabled="!enablePrevPage" ng-click="prevPage1()"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>
+
+                    <label class="form-group text-warning"> Page: <b style="color:black; font-size:18px"> {{ pageNo }} &nbsp; </b></label>
+                    <button type="button" ng-show="btn" class="btn bg-navy form-group" ng-disabled="!enableNextPage" ng-click="nextPage()"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
+                    <button type="button" ng-show="btn1" class="btn btn-default" ng-disabled="!enableNextPage" ng-click="nextPage1()"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    <!--Table Export to Excel-->
+        <div id="table_wrapper" style="visibility:hidden">
+
+            <table border="1">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th style="text-align:center">BUGNAME</th>
+                        <th>MODULE</th>
+                        <th>CREATED&nbsp;ON</th>
+                        <th>ASSIGNED&nbsp;TO</th>
+                        <th colspan="3">STATUS</th>
+                        <th colspan="2">SEVERITY</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="bug in listmodel" value="{{ bug.proj_id}}">
+                        <td style="color:orangered"><strong>{{ bug.bug_id}}</strong></td>
+                        <td class="{{bug.status_name}}"><a ng-href="/#!/updatebug/{{ bug.bug_id}}">{{bug.bug_title}}</a></td>
+
+                        <td>{{bug.mod_id.mod_name}}</td>
+                        <td>{{bug.bug_createddate | date :'dd-MM-yyyy'}}</td>
+                        <td>{{bug.assignedto.user_emailid ||'---'}}</td>
+                        <td colspan="3"><select ng-style="getStyle(bug.bug_stat_id)" ng-model="bug.bug_stat_id" ng-change="onstatuschanged(bug)"><option ng-repeat="status in statusmodel" value="{{ status.status_id}}">{{status.status_name}}</option></select></td>
+                        <td colspan="2">{{bug.seve_name}}</td>
+                    </tr>
+                </tbody>
+            </table><!--table-->
+
+
+
+        </div>
+    </div><!--box-header with-border-->
+</div><!--mbox box-primary-->

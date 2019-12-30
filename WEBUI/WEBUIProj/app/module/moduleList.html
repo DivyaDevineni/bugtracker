@@ -1,0 +1,140 @@
+﻿<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <!--<div class="pull-right">
+                <select class="form-control">
+                    <option selected="">-- Select Project --</option>
+                    <option>Amigos</option>
+                    <option>Bug Mobile</option>
+                    <option>Bug Tracker</option>
+                </select>
+            </div>-->
+            <!--<div class="notifications pull-right">
+                <ul>
+                    <li>
+                        <div class="btn-group"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-user"></i> <span class="count">8</span> <span class="circle"></span> </a> </div>
+                    </li>
+                    <li>
+                        <div class="btn-group"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-bug"></i> <span class="count">16</span> <span class="circle"></span> </a> </div>
+                    </li>
+                    <li>
+                        <div class="btn-group"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-file"></i> <span class="count">3</span> <span class="circle"></span> </a> </div>
+                    </li>
+                </ul>
+            </div>-->
+            <h3>Module List</h3>
+            <hr>
+            <div class="notifications pull-right padbot10">
+                <ul>
+                    <li><a id="btnModule" href="" ng-click="addModule();"><i class="fa fa-file"></i> Add New Module</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-head">
+                        <tr>
+                            <!--<th width="84">S.No</th>-->
+                            <th width="411">Module Name</th>
+                            <th width="452">Project Name</th>
+                            <th width="123">Status</th>
+                            <th width="64">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="mod in moduleList">
+
+                            <td>{{mod.mod_name}}</td>
+                            <td>{{mod.proj_name}}</td>
+                            <td><span class="stLbl label {{mod.mod_isactive ? 'btnActive' : 'btnInActive'}}"> {{mod.mod_isactive ? 'Active' : 'Inactive'}} </span></td>
+                            <td>
+                                <a id="btnModule" href="" ng-click="Edit(mod)"><i class="fa fa-pencil"></i></a> 
+                                <a href="javascript:;" ng-click="deactivate(mod, false)"><i class="fa fa-times"></i></a>
+                            </td>
+                            <!--<td class="col-md-3 text-center">
+                                <a class='btn btn-primary btn-xs' ng-click="Edit(mod)">
+                                    <span class="glyphicon glyphicon-edit"></span> Edit
+                                </a>
+                                <a class="btn btn-danger btn-xs" ng-click="deactivate(mod, false)" ng-show="mod.mod_isactive">
+                                    <span class="glyphicon glyphicon-remove"></span> Deactivate
+                                </a>
+                                <a class="btn btn-info btn-xs" ng-click="deactivate(mod, true)" ng-hide="mod.mod_isactive">
+                                    <i class="fa fa-plus"></i> Activate
+                                </a>
+                            </td>
+
+
+                            <td>01</td>
+                            <td>Amig</td>
+                            <td>Amig</td>
+                            <td><span class="stLbl label btnActive">Active</span></td>
+                            <td><a id="btnModule" href="#moduleEdit" onclick="editModule();"><i class="fa fa-pencil"></i></a> <a href="javascript:;"><i class="fa fa-times"></i></a></td>-->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="pagination pagination-sm pull-right">
+                <li class="disabled"><a href="#">«</a></li>
+                <li class="active"><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">»</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="col-md-12 grBox animated fadeIn" id="moduleEdit" style="margin-top: 15px; display: none;">
+        <div class="col-md-12">
+            <h3>Edit Module</h3>
+            <hr>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Project Name: <span class="red">*</span></label>
+                        <select class="form-control" id="ddlproject" ng-model="model.mod_proj_id">
+                            <option selected value=""> -- Select Project  -- </option>
+                            <option ng-repeat="proj in projlist" value="{{ proj.proj_id}}">{{ proj.proj_name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Module: <span class="red">*</span></label>
+                        <input class="form-control input-sm" type="text" id="txtmodname" name="modname" maxlength="50" ng-model="model.mod_name" ng-pattern="/^[a-zA-Z\_\-\&\ ]*$/" required />
+                        <!--ng-pattern="/^[A-Za-z_@./#&+- ]*$/"-->
+                        <span style="color:red;" ng-show="form.modname.$touched && form.modname.$invalid||submitted&&form.modname.$error.required">Module name is required.</span>
+                        <span style="color:red" ng-show="form.modname.$error.pattern">Please enter valid name.</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Status: <span class="red">*</span></label>
+                        <select class="form-control" ng-model="model.mod_isactive">
+                            <option selected="">-- Select --</option>
+                            <option value="true">Active</option>
+                            <option value="false">InActive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12">
+            <div class="no-padding col-lg-6 col-md-12 col-sm-12 pull-right text-right">
+                <input type="reset" value="CANCEL" class="btn btn-danger" onclick="setVis('moduleEdit','none')">
+                <input type="button" value="UPDATE" ng-click="Save(form)" class="btn btn-primary" onclick="setVis('moduleEdit','none')">
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
